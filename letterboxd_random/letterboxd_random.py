@@ -9,11 +9,12 @@ sample_size = 5
 page_lists = {} #dictionary of lists of movie posters/entries associated with each (required) page of the watchlist
 gui_mode = False #flag for whether to run in GUI mode or run headless ; default = headless mode
 url_prefix = 'https://letterboxd.com'
-list_name = "Watchlist" # name of the list being searched ; default value is 'Watchlist'
+list_name = "watchlist" # name of the list being searched ; default value is 'watchlist'
+list_name_base = ""
 
 #flag/argument checking
 for i in range(len(sys.argv)):
-    if sys.argv[i] == "-s": #flag for custom sample size, default = 5
+    if sys.argv[i] == "-n": #flag for custom sample size, default = 5
         try:
             if sys.argv[i+1].isdigit() and int(sys.argv[i+1]) > 0:
                 sample_size = int(sys.argv[i+1])
@@ -35,6 +36,11 @@ for i in range(len(sys.argv)):
         except IndexError:
             print("ERROR: Invalid input for GUI mode. '-g' flag must be followed by a '0' or '1' to indicate headless or GUI mode, respectively.")
             sys.exit()
+    elif sys.argv[i] == "-l": #flag for a custom list name 
+        try: 
+            list_name = "list/" + sys.argv[i+1].replace(" ", "-")
+        except IndexError:
+            print("ERROR: custom list name was not provided following the '-l' flag")
             
 #username for the target profile
 ##username = input('Input username for account: ')            
@@ -43,7 +49,7 @@ username = "naomi_lover"
 #getting HTML of the user's watchlist page
 #using user-agent request header associated with Firefox for image loading (posters)
 headers = {"User-Agent" : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:101.0) Gecko/20100101 Firefox/101.0"}
-r = requests.get('https://letterboxd.com/%s/watchlist/' %(username), headers=headers)
+r = requests.get('https://letterboxd.com/%s/%s' %(username, list_name), headers=headers)
 ##print(r.content)
 with open('temp.txt', 'w') as f:
     f.write(r.text)
@@ -76,7 +82,7 @@ for random_val in random_values:
             page_lists[page_number] = posters
             ##print("le size: ", len(page_lists[page_number]))
         else:
-            r = requests.get('https://letterboxd.com/%s/watchlist/page/%s' %(username, page_number))
+            r = requests.get('https://letterboxd.com/%s/%s/page/%s' %(username, list_name, page_number))
             ##print(r.url)
             ##print(r.text)
             soup = BeautifulSoup(r.text, features="html.parser")
@@ -108,7 +114,8 @@ if not gui_mode: #headless mode ; terminal output
     sys.exit()
 else: #gui mode using the tkinter module for display
     root = Tk()
+    list_name_base = 
     root.title('Letterboxd Results for: %s' % (list_name)) 
-    #TODO: finish creating a window with a poster image and interactive links for each film
+    
     
     
