@@ -11,6 +11,7 @@ gui_mode = False #flag for whether to run in GUI mode or run headless ; default 
 url_prefix = 'https://letterboxd.com'
 list_name = "watchlist" # name of the list being searched ; default value is 'watchlist'
 list_name_base = ""
+results_per_page = 28 #results per page depends on the list; watchlist displays 28 results per page, all other lists display 100 per page
 
 #flag/argument checking
 for i in range(len(sys.argv)):
@@ -38,13 +39,15 @@ for i in range(len(sys.argv)):
             sys.exit()
     elif sys.argv[i] == "-l": #flag for a custom list name 
         try: 
-            list_name = "list/" + sys.argv[i+1].replace(" ", "-")
+            if sys.argv[i+1].lower() == "watchlist":
+                list_name = sys.argv[i+1]
+            else:    
+                list_name = "list/" + sys.argv[i+1].replace(" ", "-")
         except IndexError:
             print("ERROR: custom list name was not provided following the '-l' flag")
             
 #username for the target profile
-##username = input('Input username for account: ')            
-username = "naomi_lover"           
+username = input('Input username for account: ')                     
             
 #getting HTML of the user's watchlist page
 #using user-agent request header associated with Firefox for image loading (posters)
@@ -57,25 +60,35 @@ with open('temp.txt', 'w') as f:
 
 #parse the HTML for watchlist length, this will be the randomizer range
 soup = BeautifulSoup(r.text, features="html.parser")
-spans = soup.find_all('span', {"class": "watchlist-count"})
-##print("length of spans: ", len(spans))
-watch_count = [int(watchcount) for watchcount in str.split(spans[0].text) if watchcount.isdigit()]
-watch_count = watch_count[0]    #type conversion from list --> int
+spans = []
+watch_count = 0 #default value
+if list_name == "watchlist":
+    spans = soup.find_all('span', {"class": "watchlist-count"})
+    watch_count = [int(watchcount) for watchcount in str.split(spans[0].text) if watchcount.isdigit()]
+    watch_count = watch_count[0]    #type conversion from list --> int
+else:
+    results_per_page = 100
+    spans = soup.find('meta', {"name": "description"})
+    for s in spans['content'].split():
+        if s.isdigit():
+            watch_count = int(s)
+            break
+print("tester: ", watch_count)    
 
 
 if sample_size > watch_count:
     sample_size = watch_count
 random_values = random.sample(range(watch_count), k=sample_size)
 random_values.sort()
-##print(random_values)
+print(random_values)
 
 
 selections = {}
 #original BeautifulSoup object is for the 0th page (21 results per page)
 increment = 1
 for random_val in random_values:
-    entry_number = random_val % 28
-    page_number = int(((random_val) / 28)+1)
+    entry_number = random_val % results_per_page
+    page_number = int(((random_val) / results_per_page)+1)
     if page_number not in page_lists:
         if page_number == 1:
             posters = soup.find_all('li', {"class": "poster-container"})
@@ -96,7 +109,7 @@ for random_val in random_values:
     img_object = page_lists[page_number][entry_number].findChild('img')
     selections[increment-1] =  (img_object['alt'], div_object['data-target-link'])
     if not gui_mode:
-        print(str(increment), '. ', img_object['alt'],  '\n       ',  url_prefix, div_object['data-target-link'])
+        print(f"{str(increment)}. {img_object['alt']}\n       {url_prefix}{div_object['data-target-link']}")
     increment += 1
     
 if not gui_mode: #headless mode ; terminal output 
@@ -114,7 +127,7 @@ if not gui_mode: #headless mode ; terminal output
     sys.exit()
 else: #gui mode using the tkinter module for display
     root = Tk()
-    list_name_base = 
+    ##list_name_base = 
     root.title('Letterboxd Results for: %s' % (list_name)) 
     
     
