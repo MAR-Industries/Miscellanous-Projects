@@ -19,3 +19,4 @@ Default mode is headless, so results are displayed to the command line / termina
 
 #### Planned updates:
 - Finish implementing GUI mode, with a scrollable window displaying movie posters and interactive links for each randomly selected entry. Will utilize the **tkinter** module for Python.
+- Implement an option to save a username and other potential arguments, using metadata or some simple txt file structure. This should save you repeating the same username over and over per use
