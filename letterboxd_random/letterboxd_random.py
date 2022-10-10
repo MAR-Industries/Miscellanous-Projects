@@ -54,9 +54,9 @@ username = input('Input username for account: ')
 headers = {"User-Agent" : "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:101.0) Gecko/20100101 Firefox/101.0"}
 r = requests.get('https://letterboxd.com/%s/%s' %(username, list_name), headers=headers)
 ##print(r.content)
-with open('temp.txt', 'w') as f:
-    f.write(r.text)
-    f.close    
+##with open('temp.txt', 'w') as f:
+##f.write(r.text)
+##f.close    
 
 #parse the HTML for watchlist length, this will be the randomizer range
 soup = BeautifulSoup(r.text, features="html.parser")
