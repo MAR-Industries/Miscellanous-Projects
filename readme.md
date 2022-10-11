@@ -13,7 +13,7 @@ Default mode is headless, so results are displayed to the command line / termina
 
 #### Options
 
-python ***letterboxd_random.py*** [-l list_name] [-n number_of_results] [-g option]
+python ***letterboxd_random.py*** [-***l*** list_name] [-***n*** number_of_results] [-***g*** option]
   
 
 ***-l*** : 
