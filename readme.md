@@ -13,7 +13,7 @@ Default mode is headless, so results are displayed to the command line / termina
 
 #### Options:
 
-python ***letterboxd_random.py*** [-***l*** list_name] [-***n*** number_of_results] [-***g*** option]
+python ***letterboxd_random.py*** [-***l*** list_name] [-***n*** number_of_results] [-***g*** option] [***-help***]
   
 
 ***-l*** : 
@@ -24,6 +24,9 @@ python ***letterboxd_random.py*** [-***l*** list_name] [-***n*** number_of_resul
 
 ***-g*** : 
 	Argument for GUI mode. Accepts '0' for headless or '1' for GUI mode. Default is headless.
+	
+***-help*** : 
+	Prints all arguments the script takes with minimal descriptions
 
 #### Planned updates:
 - Finish implementing GUI mode, with a scrollable window displaying movie posters and interactive links for each randomly selected entry. Will utilize the **tkinter** module for Python.
