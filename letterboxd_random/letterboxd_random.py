@@ -12,9 +12,13 @@ url_prefix = 'https://letterboxd.com'
 list_name = "watchlist" # name of the list being searched ; default value is 'watchlist'
 list_name_base = ""
 results_per_page = 28 #results per page depends on the list; watchlist displays 28 results per page, all other lists display 100 per page
+help_printout = "Options: \n-n number_of_results \n-g gui mode \n-l list_name"
 
 #flag/argument checking
 for i in range(len(sys.argv)):
+    if sys.argv[i] == "-help":
+        print(help_printout)
+        sys.exit()
     if sys.argv[i] == "-n": #flag for custom sample size, default = 5
         try:
             if sys.argv[i+1].isdigit() and int(sys.argv[i+1]) > 0:
