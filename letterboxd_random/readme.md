@@ -5,6 +5,8 @@ I wanted a script that returns a randomized set of movies from a user's watchlis
 
 Default mode is headless, so results are displayed to the command line / terminal. The user supplies a username argument, an optional argument for a GUI mode that utilizes the **tkinter** module, and some other optional arguments that are detailed below. Simply execute the **letterboxd_random.py** script for functionality. 
 
+There also is an executable in the 'exe' folder that will run on default settings.
+
 #### Options:
 
 python ***letterboxd_random.py*** [-***l*** list_name] [-***n*** number_of_results] [-***g*** option] [***-help***]
