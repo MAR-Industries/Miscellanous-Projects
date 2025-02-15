@@ -67,8 +67,10 @@ soup = BeautifulSoup(r.text, features="html.parser")
 spans = []
 watch_count = 0 #default value
 if list_name == "watchlist":
-    spans = soup.find_all('span', {"class": "watchlist-count"})
-    watch_count = [int(watchcount) for watchcount in str.split(spans[0].text) if watchcount.isdigit()]
+    spans = soup.find_all('span', {"class": "js-watchlist-count"})
+    ##print(spans)
+    watch_count = [int(watchcount) for watchcount in str.split(spans[0].text.replace(",", "")) if watchcount.isdigit()]
+    ##print(watch_count)
     watch_count = watch_count[0]    #type conversion from list --> int
 else:
     results_per_page = 100
